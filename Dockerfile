@@ -1,10 +1,9 @@
-FROM ghcr.io/getzola/zola:v0.17.1 as zola
+FROM ghcr.io/getzola/zola:v0.17.2 AS builder
 
-COPY . /project
-WORKDIR /project
+WORKDIR /app
+COPY . .
 RUN ["zola", "build"]
 
-FROM ghcr.io/static-web-server/static-web-server:2
-WORKDIR /public
-COPY --from=zola /project/public /public
-CMD ["static-web-server", "-p", "3000"]
+FROM joseluisq/static-web-server:2
+COPY --from=builder /app/public /public
+ENV SERVER_PORT 3000
