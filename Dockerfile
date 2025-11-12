@@ -5,5 +5,6 @@ WORKDIR /project
 RUN ["zola", "build"]
 
 FROM ghcr.io/static-web-server/static-web-server:2
-WORKDIR /
+WORKDIR /public
 COPY --from=zola /project/public /public
+CMD ["static-web-server", "-p", "3000"]
